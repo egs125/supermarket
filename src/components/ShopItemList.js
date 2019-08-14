@@ -1,5 +1,6 @@
 import React from 'react';
 import ShopItem from './ShopItem';
+import { inject, observer } from 'mobx-react'; // 불러오기
 
 const items = [
   {
@@ -20,9 +21,15 @@ const items = [
   },
 ];
 
-const ShopItemList = () => {
-  const itemList = items.map(item => <ShopItem {...item} key={item.name} />);
+// **** onPut 함수 추가됨
+const ShopItemList = ({ onPut }) => {
+  const itemList = items.map(item => (
+    <ShopItem {...item} key={item.name} onPut={onPut} />
+  ));
   return <div>{itemList}</div>;
 };
 
-export default ShopItemList;
+// **** inject, observer 적용
+export default inject(({ market }) => ({
+  onPut: market.put,
+}))(observer(ShopItemList));
